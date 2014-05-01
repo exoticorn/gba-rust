@@ -1,10 +1,15 @@
 pub mod hw {
+    extern "rust-intrinsic" {
+        fn volatile_load<T>(src: *T) -> T;
+        fn volatile_store<T>(dst: *mut T, val: T);
+    }
+    
     unsafe fn read16(addr: u32) -> u16 {
-        *(addr as *u16)
+        volatile_load(addr as *u16)
     }
 
     unsafe fn write16(addr: u32, value: u16) {
-        *(addr as *mut u16) = value;
+        volatile_store(addr as *mut u16, value);
     }
 
     #[allow(dead_code)]
