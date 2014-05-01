@@ -1,7 +1,7 @@
-ARM_TOOLS=$HOME/devkitpro/devkitARM/arm-none-eabi/bin
+ARM_TOOLS=$HOME/sdks/devkitARM/arm-none-eabi/bin
 mkdir -p out && \
-rustc --emit=ir game.rs -O -Z no-landing-pads --target arm-none-linux -o out/game.ll && \
-llc-3.5 -O3 -march=arm -mcpu=arm7tdmi out/game.ll && \
+rustc --emit=ir game.rs -Z no-landing-pads --target arm-none-linux -o out/game.ll && \
+llc -O3 -march=arm -mcpu=arm7tdmi out/game.ll && \
 $ARM_TOOLS/as -o out/game.o out/game.s && \
 $ARM_TOOLS/as -o out/crt0.o crt0.s && \
 $ARM_TOOLS/ld -T linker.ld -o out/game.elf out/crt0.o out/game.o && \
