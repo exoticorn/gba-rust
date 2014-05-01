@@ -90,7 +90,9 @@ impl KeyState {
     }
     fn get_pressed(&self) -> u16 { self.state as u16 }
     fn get_triggered(&self) -> u16 { (self.state >> 16) as u16 }
+    #[allow(dead_code)]
     pub fn is_pressed(&self, key: Key) -> bool { self.get_pressed() & (key as u16) != 0 }
+    #[allow(dead_code)]
     pub fn is_triggered(&self, key: Key) -> bool { self.get_triggered() & (key as u16) != 0 }
 }
 

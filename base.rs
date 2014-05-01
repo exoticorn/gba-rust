@@ -10,6 +10,22 @@ pub mod kinds {
     pub trait Sized {}
 }
 
+pub mod fail {
+    pub fn abort() -> ! { loop {} }
+
+    #[inline]
+    #[lang="fail_bounds_check"]
+    pub fn fail_bounds_check(_: *u8, _: uint, _: uint, _: uint) -> ! {
+        abort()
+    }
+
+    #[inline]
+    #[lang="fail_"]
+    pub fn fail_(_: *u8, _: *u8, _: uint) -> ! {
+        abort()
+    }
+}
+
 pub mod iter {
     use super::option::*;
     
@@ -40,5 +56,6 @@ pub mod iter {
 pub mod prelude {
     pub use super::option::{ Option, Some, None };
     pub use super::kinds::*;
+    pub use super::fail::*;
     pub use super::iter::{ Iterator, Range, range };
 }
