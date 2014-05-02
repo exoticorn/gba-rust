@@ -53,9 +53,9 @@ struct Game {
 impl Game {
     fn new() -> Game { Game { arena: Arena::new(), pos: Pos { x: 15, y: 12 }, snake: [Pos { x: 0, y: 0 }, ..MAX_LENGTH], length: 0, dir: Up } }
     fn reset(&mut self) {
-        for y in range(0, 24) {
-            for x in range(0, 30) {
-                self.arena.set(x as uint, y as uint, Empty);
+        for y in range(0u, 24u) {
+            for x in range(0u, 30u) {
+                self.arena.set(x, y, Empty);
             }
         }
         self.pos.x = WIDTH / 2;
@@ -76,10 +76,9 @@ impl Game {
             self.length += 1;
         } else {
             self.arena.set(self.snake[0].x, self.snake[0].y, Empty);
-            for i in range(0, (self.length as int) - 1) {
-                let u = i as uint;
-                self.snake[u].x = self.snake[u + 1].x;
-                self.snake[u].y = self.snake[u + 1].y;
+            for i in range(0u, self.length - 1) {
+                self.snake[i].x = self.snake[i + 1].x;
+                self.snake[i].y = self.snake[i + 1].y;
             }
         }
         match self.dir {
@@ -103,9 +102,9 @@ pub fn main(_: int, _: **u8) -> int {
     gba::hw::write_bg0cnt(1 << 8);
     gba::hw::write_pal(15, 0x7fff);
     gba::hw::write_pal(31, 31 << 5);
-    for i in range(1, 7) {
-        gba::hw::write_vram16((i * 2) as u32, 0xfff0);
-        gba::hw::write_vram16((i * 2 + 1) as u32, 0x0fff);
+    for i in range(1u32, 7u32) {
+        gba::hw::write_vram16(i * 2, 0xfff0);
+        gba::hw::write_vram16(i * 2 + 1, 0x0fff);
     }
     let mut game = Game::new();
     game.reset();
