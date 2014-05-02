@@ -1,0 +1,18 @@
+GBA-RUST
+========
+
+In order to learn more about the low-level aspects of rust, I
+decided to implement some simple proof-of-concept games for the
+gameboy advance in rust.
+
+For now there is only a very simple implementation of snake.
+
+To build, you need to have the rust compiler + some recent llvm
+install in the PATH.
+Since the rust compiler is still a moving target, a nightly build
+around the time of the last commit is the safest bet, newer builds
+might or might not work.
+
+You also need to have binutils for the GBA at $ARM_TOOLS. These
+can be downloaded from:
+http://sourceforge.net/projects/devkitpro/files/devkitARM/

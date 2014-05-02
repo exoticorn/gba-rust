@@ -47,11 +47,25 @@ struct Game {
     pos: Pos,
     snake: [Pos, ..MAX_LENGTH],
     length: uint,
-    dir: Dir
+    target_length: uint,
+    dir: Dir,
+    rand: Rand,
+    food_count: uint
 }
 
 impl Game {
-    fn new() -> Game { Game { arena: Arena::new(), pos: Pos { x: 15, y: 12 }, snake: [Pos { x: 0, y: 0 }, ..MAX_LENGTH], length: 0, dir: Up } }
+    fn new() -> Game {
+        Game {
+            arena: Arena::new(),
+            pos: Pos { x: 15, y: 12 },
+            snake: [Pos { x: 0, y: 0 }, ..MAX_LENGTH],
+            length: 0,
+            target_length: 5,
+            dir: Up,
+            rand: Rand::new(1234),
+            food_count: 0
+        }
+    }
     fn reset(&mut self) {
         for y in range(0u, 24u) {
             for x in range(0u, 30u) {
@@ -61,7 +75,9 @@ impl Game {
         self.pos.x = WIDTH / 2;
         self.pos.y = HEIGHT / 2;
         self.length = 0;
+        self.target_length = 5;
         self.dir = Up;
+        self.food_count = 0;
         self.arena.set(self.pos.x, self.pos.y, Snake);
     }
 
@@ -72,13 +88,24 @@ impl Game {
         if key_state.is_triggered(gba::KeyRight) { self.dir = Right }
         self.snake[self.length].x = self.pos.x;
         self.snake[self.length].y = self.pos.y;
-        if self.length < 20 {
+        if self.length < self.target_length {
             self.length += 1;
         } else {
             self.arena.set(self.snake[0].x, self.snake[0].y, Empty);
-            for i in range(0u, self.length - 1) {
+            for i in range(0u, self.length) {
                 self.snake[i].x = self.snake[i + 1].x;
                 self.snake[i].y = self.snake[i + 1].y;
+            }
+        }
+        let food_x = (self.rand.next_u8() & 31) as uint;
+        let food_y = (self.rand.next_u8() & 31) as uint;
+        if self.food_count < 4 && food_x < WIDTH && food_y < HEIGHT {
+            match self.arena.get(food_x, food_y) {
+                Empty => {
+                    self.arena.set(food_x, food_y, Food);
+                    self.food_count += 1;
+                }
+                _ => {}
             }
         }
         match self.dir {
@@ -89,6 +116,13 @@ impl Game {
         }
         match self.arena.get(self.pos.x, self.pos.y) {
             Snake => self.reset(),
+            Food => {
+                self.food_count -= 1;
+                self.target_length += 5;
+                if self.target_length > MAX_LENGTH - 1 {
+                    self.target_length = MAX_LENGTH - 1;
+                }
+            }
             _ => {}
         };
         self.arena.set(self.pos.x, self.pos.y, Snake);

@@ -98,6 +98,28 @@ pub mod iter {
     }
 }
 
+#[allow(dead_code)]
+pub mod rand {
+    pub use super::iter::*;
+    pub use super::option::*;
+    pub struct Rand { state: u32 }
+
+    impl Rand {
+        pub fn new(seed: u32) -> Rand { Rand { state: seed } }
+        pub fn next_bool(&mut self) -> bool {
+            self.state = self.state * 1664525u32 + 1013904223u32;
+            self.state & 0x80000000u32 != 0
+        }
+        pub fn next_u8(&mut self) -> u8 {
+            let mut result = 0u8;
+            for i in range(0u, 8u) {
+                result |= (self.next_bool() as u8) << i;
+            }
+            result
+        }
+    }
+}
+
 pub mod prelude {
     pub use super::option::{ Option, Some, None };
     pub use super::kinds::*;
@@ -105,4 +127,5 @@ pub mod prelude {
     pub use super::num::*;
     pub use super::clone::*;
     pub use super::iter::{ Iterator, Range, range };
+    pub use super::rand::Rand;
 }
