@@ -10,7 +10,6 @@ mod gba;
 enum Tile { Empty, Snake, Food }
 static WIDTH: uint = 30;
 static HEIGHT: uint = 20;
-#[allow(dead_code)]
 static MAX_LENGTH: uint = 100;
 
 struct Arena {
@@ -46,11 +45,13 @@ enum Dir { Up, Down, Left, Right }
 struct Game {
     arena: Arena,
     pos: Pos,
+    snake: [Pos, ..MAX_LENGTH],
+    length: uint,
     dir: Dir
 }
 
 impl Game {
-    fn new() -> Game { Game { arena: Arena::new(), pos: Pos { x: 15, y: 12 }, dir: Up } }
+    fn new() -> Game { Game { arena: Arena::new(), pos: Pos { x: 15, y: 12 }, snake: [Pos { x: 0, y: 0 }, ..MAX_LENGTH], length: 0, dir: Up } }
     fn reset(&mut self) {
         for y in range(0, 24) {
             for x in range(0, 30) {
@@ -59,6 +60,7 @@ impl Game {
         }
         self.pos.x = WIDTH / 2;
         self.pos.y = HEIGHT / 2;
+        self.length = 0;
         self.dir = Up;
         self.arena.set(self.pos.x, self.pos.y, Snake);
     }
@@ -68,6 +70,18 @@ impl Game {
         if key_state.is_triggered(gba::KeyDown) { self.dir = Down }
         if key_state.is_triggered(gba::KeyLeft) { self.dir = Left }
         if key_state.is_triggered(gba::KeyRight) { self.dir = Right }
+        self.snake[self.length].x = self.pos.x;
+        self.snake[self.length].y = self.pos.y;
+        if self.length < 20 {
+            self.length += 1;
+        } else {
+            self.arena.set(self.snake[0].x, self.snake[0].y, Empty);
+            for i in range(0, (self.length as int) - 1) {
+                let u = i as uint;
+                self.snake[u].x = self.snake[u + 1].x;
+                self.snake[u].y = self.snake[u + 1].y;
+            }
+        }
         match self.dir {
             Up => { self.pos.y -= 1 }
             Down => { self.pos.y += 1 }
