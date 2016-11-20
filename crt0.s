@@ -20,8 +20,4 @@ _loop:  strb    r1, [r0], #1
         bgt     _loop
         bx      lr
 
-        .GLOBAL __aeabi_unwind_cpp_pr0
-__aeabi_unwind_cpp_pr0:
-_stop:  b       _stop
-        
         .END

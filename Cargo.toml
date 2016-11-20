@@ -1,0 +1,15 @@
+[package]
+name = "gba-snake"
+version = "0.1.0"
+authors = ["dennis.ranke@gmail.com"]
+
+[profile.dev]
+panic = "abort"
+lto = true
+
+[profile.release]
+panic = "abort"
+lto = true
+
+[lib]
+crate-type = ["staticlib"]
