@@ -1,0 +1,12 @@
+{
+"llvm-target": "arm-none-eabi",
+"target-endian": "little",
+"target-pointer-width": "32",
+"data-layout": "e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64",
+"arch": "arm",
+"target-os": "none",
+"os": "none",
+"target-env": "",
+"target-vendor": "unknown",
+"cpu": "arm7tdmi"
+}

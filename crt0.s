@@ -20,4 +20,14 @@ _loop:  strb    r1, [r0], #1
         bgt     _loop
         bx      lr
 
+        .GLOBAL __aeabi_memclr4
+__aeabi_memclr4:
+        movs    r1, r1
+        bxle    lr
+        mov     r2, #0
+_loop2: str     r2, [r0], #4
+        subs    r1, r1, #1
+        bgt     _loop2
+        bx      lr
+
         .END

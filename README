@@ -7,11 +7,9 @@ gameboy advance in rust.
 
 For now there is only a very simple implementation of snake.
 
-To build, you need to have the rust compiler + some recent llvm
-install in the PATH.
-Since the rust compiler is still a moving target, a nightly build
-around the time of the last commit is the safest bet, newer builds
-might or might not work.
+To build, you need to install nightly rust + sources (probably using rustup.rs)
+as well as [xargo](https://github.com/japaric/xargo).
+The build has been tested with `rustc 1.15.0-nightly (ac635aa95 2016-11-18)`.
 
 You also need to have binutils for the GBA at $ARM_TOOLS. These
 can be downloaded from:
