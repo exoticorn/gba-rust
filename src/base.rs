@@ -20,7 +20,7 @@ pub mod rand {
             Rand { state: seed }
         }
         pub fn next_bool(&mut self) -> bool {
-            self.state = self.state * 1664525u32 + 1013904223u32;
+            self.state = self.state.wrapping_mul(1664525u32).wrapping_add(1013904223u32);
             self.state & 0x80000000u32 != 0
         }
         pub fn next_u8(&mut self) -> u8 {

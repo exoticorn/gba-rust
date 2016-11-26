@@ -134,9 +134,9 @@ impl Game {
             }
         }
         match self.dir {
-            Dir::Up => self.pos.y -= 1,
+            Dir::Up => self.pos.y = self.pos.y.wrapping_sub(1),
             Dir::Down => self.pos.y += 1,
-            Dir::Left => self.pos.x -= 1,
+            Dir::Left => self.pos.x = self.pos.x.wrapping_sub(1),
             Dir::Right => self.pos.x += 1,
         }
         match self.arena.get(self.pos.x, self.pos.y) {

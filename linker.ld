@@ -11,4 +11,12 @@ SECTIONS {
 
   .data : { *(.data) }
   .bss : { *(.bss) }
+
+  __exidx_start = .;
+  /* Exception handling, exidx needs a dedicated section */
+  .ARM.exidx : ALIGN(4)
+  {
+  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+  }
+  __exidx_end = .;
 }

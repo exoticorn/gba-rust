@@ -11,6 +11,5 @@ To build, you need to install nightly rust + sources (probably using rustup.rs)
 as well as [xargo](https://github.com/japaric/xargo).
 The build has been tested with `rustc 1.15.0-nightly (ac635aa95 2016-11-18)`.
 
-You also need to have binutils for the GBA at $ARM_TOOLS. These
-can be downloaded from:
-http://sourceforge.net/projects/devkitpro/files/devkitARM/
+You also need arm-none-eabi binutils in your path. On linux you can
+probably install those through your package manager.
