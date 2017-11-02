@@ -22,8 +22,9 @@ impl Write for BgWriter {
     }
 }
 
+#[no_mangle]
 #[lang = "panic_fmt"]
-pub extern "C" fn rust_begin_panic(_msg: ::core::fmt::Arguments,
+pub extern "C" fn rust_begin_unwind(_msg: ::core::fmt::Arguments,
                                    _file: &'static str,
                                    _line: u32)
                                    -> ! {
