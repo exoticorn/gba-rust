@@ -5,6 +5,7 @@ mod base;
 mod gba;
 
 use base::rand::Rand;
+pub use base::rust_begin_unwind;
 
 #[derive(Copy, Clone)]
 enum Tile {
@@ -116,7 +117,8 @@ impl Game {
         if self.length < self.target_length {
             self.length += 1;
         } else {
-            self.arena.set(self.snake[0].x, self.snake[0].y, Tile::Empty);
+            self.arena
+                .set(self.snake[0].x, self.snake[0].y, Tile::Empty);
             for i in 0..self.length {
                 self.snake[i].x = self.snake[i + 1].x;
                 self.snake[i].y = self.snake[i + 1].y;
