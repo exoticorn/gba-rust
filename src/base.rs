@@ -1,5 +1,7 @@
+#![feature(panic_implementation)]
 use gba;
 use core::fmt::{Write, Error, write};
+use core::panic::PanicInfo;
 
 #[lang = "eh_personality"]
 pub extern "C" fn rust_eh_personality() {}
@@ -23,11 +25,15 @@ impl Write for BgWriter {
 }
 
 #[no_mangle]
-#[lang = "panic_fmt"]
-pub extern "C" fn rust_begin_unwind(_msg: ::core::fmt::Arguments,
-                                   _file: &'static str,
-                                   _line: u32)
-                                   -> ! {
+#[panic_handler]
+pub extern "C" fn rust_begin_unwind(info: &PanicInfo) -> ! {
+    let (line, file) = if let Some(location) = info.location() {
+        (location.line(), location.file())
+    } else {
+        (0, "")
+    };
+    let msg = info.payload().downcast_ref::<&str>().unwrap();
+
     load_font(0);
     gba::hw::write_pal(0, 0);
     gba::hw::write_pal(15, 0x7fff);
@@ -38,7 +44,7 @@ pub extern "C" fn rust_begin_unwind(_msg: ::core::fmt::Arguments,
     }
     let mut writer = BgWriter(0x800);
     write(&mut writer,
-          format_args!("Panic in line {} of\n{}\n\n{}", _line, _file, _msg))
+          format_args!("Panic in line {} of\n{}\n\n{}", line, file, msg))
         .unwrap();
     loop {}
 }
